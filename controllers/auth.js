@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const config = require('../config/config')
 const jwt = require('jsonwebtoken')
 
-exports.signup = (req, res, next) => {
+exports.signup = async (req, res, next) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
@@ -16,34 +16,34 @@ exports.signup = (req, res, next) => {
   const email = req.body.email
   const name = req.body.name
   const password = req.body.password
+  try {
 
-  bcrypt.hash(password, 12)
-    .then(hashedpassword => {
-      const user = new User({
-        email: email,
-        password: hashedpassword,
-        name: name
-      })
-      return user.save()
-    })
-    .then(result => {
+const hashedpassword = await bcrypt.hash(password, 12)
 
-      res.status(201).json({
-        message: 'Acoount has been created',
-        userId: result._id
-      })
+    const user = new User({
+      email: email,
+      password: hashedpassword,
+      name: name
     })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500
-      }
+    const result = await user.save()
 
-      next(err);
+
+    res.status(201).json({
+      message: 'Acoount has been created',
+      userId: result._id
     })
+
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+
+    next(err);
+  }
 
 }
 
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
@@ -55,16 +55,21 @@ exports.login = (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
   let loadedUser;
-  User.findOne({ email: email })
-    .then(user => {
+
+  try {
+    
+  
+  const user = await User.findOne({ email: email })
+   
       if (!user) {
         const error = new Error('A user with this Email was not found')
         error.statusCode = 401
         throw error
       }
       loadedUser = user;
-      return bcrypt.compare(password, user.password)
-    }).then(isEqual => {
+      const isEqual= await bcrypt.compare(password, user.password)
+  
+   
       if (!isEqual) {
         const error = new Error('worng password')
         error.statusCode = 401;
@@ -80,12 +85,11 @@ exports.login = (req, res, next) => {
         token: token,
         userId: loadedUser._id.toString()
       })
-    })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500
-      }
-
-      next(err);
-    })
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+    next(err);
+  }
+    
 }
