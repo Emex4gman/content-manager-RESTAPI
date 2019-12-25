@@ -12,7 +12,7 @@ SE_key means secret key for jsonwebtoken
 DB=
 SE_key=
 
-# FEED END POINT
+# FEED END POINTS
 
 GET /feed/posts
 
@@ -23,7 +23,6 @@ GET /feed/post/:postId
 PUT /feed/post/:postId
 
 DELETE /feed/post/:postId
-
 
 # AUTH END POINTS
 
