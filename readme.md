@@ -15,12 +15,18 @@ SE_key=
 # FEED END POINT
 
 GET /feed/posts
+
 POST /feed/posts
+
 GET /feed/post/:postId
+
 PUT /feed/post/:postId
+
 DELETE /feed/post/:postId
+
 
 # AUTH END POINTS
 
 PUT /auth/signup
+
 POST /auth/login
