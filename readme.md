@@ -10,6 +10,7 @@ mongodb://localhost:27017/post
 SE_key means secret key for jsonwebtoken
 
 DB=
+
 SE_key=
 
 # FEED END POINTS
