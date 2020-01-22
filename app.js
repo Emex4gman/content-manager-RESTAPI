@@ -64,7 +64,7 @@ app.use((error, req, res, next) => {
 mongoose.connect(env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(results => {
     const server = app.listen(process.env.PORT || 8080, (req, res, next) => {
-      console.log(`Port on ${env.PORT}`)
+      console.log(`Port on ${process.env.PORT}`)
     })
     const io = require('./socket').init(server)
     io.on('connection', socket => {
