@@ -3,7 +3,7 @@ const path = require('path')
 const { validationResult } = require('express-validator/check')
 const Post = require('../models/post')
 const User = require('../models/user')
-const io = require('../socket')
+//const io = require('../socket')
 
 
 exports.getPosts = async (req, res, next) => {
@@ -65,10 +65,10 @@ exports.createPost = async (req, res, next) => {
     creator = user;
     await user.posts.push(post);
 
-    io.getIo().emit('posts', {
-      action: 'create',
-      post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
-    })
+    // io.getIo().emit('posts', {
+    //   action: 'create',
+    //   post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
+    // })
 
     res.status(201).json(
       {
@@ -97,11 +97,11 @@ exports.getPost = async (req, res, next) => {
       error.statusCode = 404
       throw error
     }
-    io.getIo().emit('posts', { action: 'delete', post: postId })
-    res.status(200).json({
-      message: "Post Fetched ",
-      post: post
-    })
+    // io.getIo().emit('posts', { action: 'delete', post: postId })
+    // res.status(200).json({
+    //   message: "Post Fetched ",
+    //   post: post
+    // })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
@@ -157,10 +157,10 @@ exports.updatePost = async (req, res, next) => {
 
     const result = await post.save();
 
-    io.getIo().emit('posts', {
-      action: 'update',
-      post: result
-    })
+    // io.getIo().emit('posts', {
+    //   action: 'update',
+    //   post: result
+    // })
 
     res.status(200).json({
       message: 'Post Updated',

@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const authRoutes = require('./routes/auth')
-
+const serverless = require('serverless-http');
 const app = express()
 
 const fileStorage = multer.diskStorage({
@@ -44,8 +44,7 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/feed', feedRoutes)
-app.use('/auth', authRoutes)
+
 
 
 
@@ -62,17 +61,15 @@ app.use((error, req, res, next) => {
 
 
 
-mongoose.connect(env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/messages', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(results => {
-    const server = app.listen(PORT, (req, res, next) => {
-      console.log(`Port on ${PORT}`)
-    })
-    const io = require('./socket').init(server)
-    io.on('connection', socket => {
-      console.log('Client conneted')
-    })
+    console.log("connect-to database")
   })
   .catch(err => {
     console.log(err)
   })
 
+app.use('/.netlify/functions/app/feed', feedRoutes)
+app.use('/.netlify/functions/app/auth', authRoutes)
+
+module.exports.handler = serverless(app);
