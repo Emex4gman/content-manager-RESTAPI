@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/dfb95315-87d8-44ee-ba94-ea428dd0f01b/deploy-status)](https://app.netlify.com/sites/cranky-hodgkin-a867b9/deploys)
+
 This uses mongodb database
 Node
 express
