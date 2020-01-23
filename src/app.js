@@ -61,7 +61,7 @@ app.use((error, req, res, next) => {
 
 
 
-mongoose.connect('mongodb://localhost:27017/messages', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(results => {
     console.log("connect-to database")
   })
